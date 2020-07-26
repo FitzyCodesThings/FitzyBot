@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using TwitchLib.Api;
 using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
@@ -18,9 +19,12 @@ namespace FitzyBot.ConsoleApp
 {
     public partial class FitzyBot
     {
-        TwitchClient client;
+        TwitchClient client;        
+
         private readonly IOptions<TwitchConfigurationOptions> options;
         private readonly ILoyaltyService loyaltyService;
+
+        List<string> currentViewers = new List<string>();
 
         public FitzyBot(IOptions<TwitchConfigurationOptions> options, ILoyaltyService loyaltyService)
         {               
@@ -43,12 +47,15 @@ namespace FitzyBot.ConsoleApp
             client.OnWhisperReceived += Client_OnWhisperReceived;
             client.OnNewSubscriber += Client_OnNewSubscriber;
             client.OnConnected += Client_OnConnected;
+
+            client.OnUserJoined += Client_OnUserJoined;
+            client.OnUserLeft += Client_OnUserLeft;
         }
 
         public void Run() => client.Connect();
 
         private void Client_OnLog(object sender, OnLogArgs e)
-        {
+        {   
             Console.WriteLine($"{e.DateTime.ToString()}: {e.BotUsername} - {e.Data}");
         }
 
@@ -63,17 +70,38 @@ namespace FitzyBot.ConsoleApp
             client.SendMessage(e.Channel, "Hey guys! I am a bot connected via TwitchLib!");
         }
 
+        private void Client_OnUserJoined(object sender, OnUserJoinedArgs e)
+        {            
+            if (!currentViewers.Contains(e.Username))
+                currentViewers.Add(e.Username);
+        }
+
+        private void Client_OnUserLeft(object sender, OnUserLeftArgs e)
+        {
+            currentViewers.Remove(e.Username);
+        }
+
         private void Client_OnMessageReceived(object sender, OnMessageReceivedArgs e)
         {
-            if (e.ChatMessage.Message.StartsWith("!fbtAward"))
+            var message = e.ChatMessage.Message.ToLower();
+
+            if (message.StartsWith("!fbtawardall"))
+            {
+                _ = this.HandleAwardPointsAllUsers(client, sender, e);
+            }
+            else if (message.StartsWith("!fbtaward"))
             {
                 _ = this.HandleAwardPoints(client, sender, e);
             }
-            else if (e.ChatMessage.Message.StartsWith("!fbtBalance"))
+            else if (message.StartsWith("!fbtremovepoints"))
+            {
+                _ = this.HandleRemovePoints(client, sender, e);
+            }
+            else if (message.StartsWith("!fbtbalance"))
             {
                 _ = this.HandleCheckBalance(client, sender, e);
             }
-            else if (e.ChatMessage.Message.StartsWith("!fbt"))
+            else if (message.StartsWith("!fbt"))
             {
                 client.SendMessage(e.ChatMessage.Channel, $"Don't know what you're trying to do there, boss... (invalid command)");
             }

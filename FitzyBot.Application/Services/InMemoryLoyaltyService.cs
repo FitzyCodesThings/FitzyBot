@@ -17,28 +17,40 @@ namespace FitzyBot.Application
         List<Person> people = new List<Person>();
 
 
-        public async Task AwardPoints(string recipientUsername, int points)
+        public async Task<int> AwardPoints(string twitchUsername, int points)
         {       
             // Do something to award the points.... //
-            var person = people.FirstOrDefault(p => p.TwitchUsername == recipientUsername);
+            var person = people.FirstOrDefault(p => p.TwitchUsername == twitchUsername);
 
             if (person == null)
             {
                 people.Add(new Person()
                 {
-                    TwitchUsername = recipientUsername,
+                    TwitchUsername = twitchUsername,
                     Balance = 0
                 });
             }
 
-            person = people.FirstOrDefault(p => p.TwitchUsername == recipientUsername);
+            person = people.FirstOrDefault(p => p.TwitchUsername == twitchUsername);
 
             person.Balance += points;
+
+            return person.Balance;
         }
 
-        public Task RemovePoints(string recipientUsername, int points)
-        {
-            throw new NotImplementedException();
+        public async Task<int> RemovePoints(string twitchUsername, int points)
+        {   
+            var person = people.FirstOrDefault(p => p.TwitchUsername == twitchUsername);
+
+            if (person == null)
+                throw new Exception("User does not exist to remove points from.");
+
+            if (person.Balance < points)
+                throw new Exception("User does not have that many points.");
+
+            person.Balance -= points;
+
+            return person.Balance;
         }
 
         public Task AddReward(Reward reward)
@@ -55,7 +67,7 @@ namespace FitzyBot.Application
             throw new NotImplementedException();
         }
 
-        public Task<int> GetUserBalance(string username)
+        public Task<int> GetUserBalance(string twitchUsername)
         {
             throw new NotImplementedException();
         }

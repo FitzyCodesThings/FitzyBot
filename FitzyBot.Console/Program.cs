@@ -32,7 +32,7 @@ namespace FitzyBot.ConsoleApp
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.Configure<TwitchConfigurationOptions>(configuration.GetSection("twitch"));
+            services.Configure<TwitchConfigurationOptions>(configuration.GetSection("twitchClient"));
 
             services.AddTransient<ILoyaltyService, InMemoryLoyaltyService>();
 

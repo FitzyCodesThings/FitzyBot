@@ -24,9 +24,9 @@ namespace FitzyBot.ConsoleApp
 
             // TODO Check recipientUsername is valid
 
-            decimal points;
+            int points;
 
-            if (decimal.TryParse(commandParts[2], out points))
+            if (int.TryParse(commandParts[2], out points))
             {
                 await loyaltyService.AwardPoints(recipientUsername, points);
 
@@ -35,7 +35,7 @@ namespace FitzyBot.ConsoleApp
             else
             {
                 // Invalid # of points //
-                client.SendMessage(e.ChatMessage.Channel, $"Invalid # of points to award.");
+                client.SendMessage(e.ChatMessage.Channel, $"Invalid # of points to award (must specify whole # of points only).");
             }
             
         }

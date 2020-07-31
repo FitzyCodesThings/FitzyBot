@@ -20,7 +20,7 @@ namespace FitzyBot.ConsoleApp
     public partial class FitzyBot
     {
         TwitchClient client;        
-
+        
         private readonly IOptions<TwitchConfigurationOptions> options;
         private readonly ILoyaltyService loyaltyService;
 

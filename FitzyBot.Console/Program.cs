@@ -1,4 +1,6 @@
-﻿using FitzyBot.Application;
+﻿using DragonchainSDK;
+using FitzyBot.Application;
+using FitzyBot.Application.Services;
 using FitzyBot.Core;
 using FitzyBot.Core.Options;
 using Microsoft.Extensions.Configuration;
@@ -32,9 +34,15 @@ namespace FitzyBot.ConsoleApp
         {
             IServiceCollection services = new ServiceCollection();
 
-            services.Configure<TwitchConfigurationOptions>(configuration.GetSection("twitchClient"));
+            services.AddSingleton(configuration);
 
-            services.AddTransient<ILoyaltyService, InMemoryLoyaltyService>();
+            services.Configure<TwitchConfigurationOptions>(configuration.GetSection("twitchClient"));
+            
+            services.AddSingleton<IDragonchainClient, DragonchainClient>();
+
+            //services.AddTransient<ILoyaltyService, InMemoryLoyaltyService>();
+
+            services.AddTransient<ILoyaltyService, SimpleDragonLoyaltyService>();
 
             services.AddTransient<FitzyBot>();
 

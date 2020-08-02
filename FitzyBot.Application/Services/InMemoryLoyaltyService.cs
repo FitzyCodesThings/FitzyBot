@@ -9,7 +9,7 @@ using TwitchLib.Client;
 using TwitchLib.Client.Enums;
 using TwitchLib.Client.Events;
 
-namespace FitzyBot.Application
+namespace FitzyBot.Application.Services
 {
 
     public class InMemoryLoyaltyService : ILoyaltyService

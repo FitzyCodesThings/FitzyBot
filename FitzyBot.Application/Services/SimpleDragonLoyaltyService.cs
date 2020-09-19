@@ -19,7 +19,7 @@ namespace FitzyBot.Application.Services
             this.dcClient = dcClient;
         }
 
-        public async Task<int> AwardPoints(string twitchUsername, int points)
+        public async Task<int> AwardPoints(string executedByUsername, string twitchUsername, int points)
         {
             int balance;
             try
@@ -42,7 +42,7 @@ namespace FitzyBot.Application.Services
             return balance + points;
         }
 
-        public async Task<int> RemovePoints(string twitchUsername, int points)
+        public async Task<int> RemovePoints(string executedByUsername, string twitchUsername, int points)
         {
             int balance;
 

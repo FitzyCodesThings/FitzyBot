@@ -1,0 +1,14 @@
+{
+  "response": {
+    "commandSource": "Twitch",
+    "operation": "adjustPoints",
+    "executedByUsername": "testExecutor",
+    "targetUsername": "testTarget",
+    "pointAdjustment": -500
+  },
+  "Twitch-testTarget": {
+    "commandSource": "Twitch",
+    "userName": "testTarget",
+    "balance": 500
+  }
+}

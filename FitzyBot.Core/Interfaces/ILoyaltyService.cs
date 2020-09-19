@@ -11,9 +11,9 @@ namespace FitzyBot.Core
     public interface ILoyaltyService
     {
         // Administrative Functions //
-        public Task<int> AwardPoints(string twitchUsername, int points);
+        public Task<int> AwardPoints(string executedByUsername, string twitchUsername, int points);
 
-        public Task<int> RemovePoints(string twitchUsername, int points);
+        public Task<int> RemovePoints(string executedByUsername, string twitchUsername, int points);
 
         public Task AddReward(Reward reward);
 

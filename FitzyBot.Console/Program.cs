@@ -5,6 +5,7 @@ using FitzyBot.Core;
 using FitzyBot.Core.Options;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using System;
 
 namespace FitzyBot.ConsoleApp
@@ -36,13 +37,20 @@ namespace FitzyBot.ConsoleApp
 
             services.AddSingleton(configuration);
 
+            services.AddLogging(configure => {
+                configure.AddConfiguration(configuration.GetSection("Logging"));
+                configure.AddConsole();
+            });
+
             services.Configure<TwitchConfigurationOptions>(configuration.GetSection("twitchClient"));
             
             services.AddSingleton<IDragonchainClient, DragonchainClient>();
 
             //services.AddTransient<ILoyaltyService, InMemoryLoyaltyService>();
 
-            services.AddTransient<ILoyaltyService, SimpleDragonLoyaltyService>();
+            //services.AddTransient<ILoyaltyService, SimpleDragonLoyaltyService>();
+
+            services.AddTransient<ILoyaltyService, DragonchainContractLoyaltyService>();
 
             services.AddTransient<FitzyBot>();
 

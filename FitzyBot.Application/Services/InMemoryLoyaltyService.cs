@@ -17,7 +17,7 @@ namespace FitzyBot.Application.Services
         List<Person> people = new List<Person>();
 
 
-        public async Task<int> AwardPoints(string twitchUsername, int points)
+        public async Task<int> AwardPoints(string executedByUsername, string twitchUsername, int points)
         {       
             // Do something to award the points.... //
             var person = people.FirstOrDefault(p => p.TwitchUsername == twitchUsername);
@@ -38,7 +38,7 @@ namespace FitzyBot.Application.Services
             return person.Balance;
         }
 
-        public async Task<int> RemovePoints(string twitchUsername, int points)
+        public async Task<int> RemovePoints(string executedByUsername, string twitchUsername, int points)
         {   
             var person = people.FirstOrDefault(p => p.TwitchUsername == twitchUsername);
 
